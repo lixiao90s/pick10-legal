@@ -582,79 +582,93 @@ a {
   }
 }
 
-/* ========== Subpages (legal / support) ========== */
+/* ========== Subpages — homepage-style centered layout ========== */
 body.subpage {
   background: var(--cream);
 }
 
-.page-hero {
+.page-shell {
   position: relative;
-  padding: calc(var(--header-h) + 48px) 20px 56px;
-  text-align: center;
-  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.page-hero-bg {
-  position: absolute;
+.page-bg {
+  position: fixed;
   inset: 0;
   background: url("assets/hero-bg.png") center top / cover no-repeat;
   z-index: 0;
+  pointer-events: none;
 }
 
-.page-hero-bg::after {
+.page-bg::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(255, 248, 240, 0.5) 0%,
+    rgba(255, 248, 240, 0.55) 0%,
+    rgba(255, 248, 240, 0.82) 45%,
     rgba(255, 248, 240, 0.92) 100%
   );
 }
 
-.page-hero-inner {
+.page-center {
   position: relative;
   z-index: 1;
-  max-width: 720px;
+  flex: 1;
+  width: 100%;
+  max-width: 780px;
   margin: 0 auto;
-}
-
-.page-hero-inner h1 {
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  font-weight: 900;
-  color: var(--text);
-  margin-bottom: 8px;
-}
-
-.page-hero-sub {
-  font-size: 1rem;
-  color: var(--text-light);
-}
-
-.page-main {
-  max-width: var(--content-width);
-  margin: -32px auto 0;
-  padding: 0 20px 72px;
-  position: relative;
-  z-index: 2;
+  padding: calc(var(--header-h) + 28px) 20px 48px;
 }
 
 .page-card {
-  background: #fff;
-  border-radius: var(--radius);
-  padding: 40px 36px;
-  box-shadow: var(--shadow);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0 12px 48px rgba(155, 89, 245, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  overflow: hidden;
 }
 
-.page-card > p {
+.page-card-head {
+  text-align: center;
+  padding: 36px 36px 28px;
+  background: linear-gradient(180deg, rgba(255, 110, 180, 0.06), transparent);
+  border-bottom: 1px dashed rgba(155, 89, 245, 0.15);
+}
+
+.page-card-head h1 {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 900;
+  color: var(--text);
+  margin: 12px 0 8px;
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.page-body {
+  padding: 32px 36px 40px;
+}
+
+.page-body > p {
   font-size: 0.96rem;
   line-height: 1.8;
   color: var(--text-light);
   margin-bottom: 0;
 }
 
-/* Bilingual paragraph pairs: EN then CN */
-.page-card > p + p:not(.page-meta):not(.url-box) {
+.page-body > p + p:not(.page-meta) {
   margin-top: 8px;
   margin-bottom: 24px;
   padding-bottom: 20px;
@@ -663,60 +677,48 @@ body.subpage {
   font-size: 0.93rem;
 }
 
-.page-card h2 {
+.page-body h2 {
   font-size: 1.08rem;
   font-weight: 800;
   color: var(--text);
-  margin: 36px 0 16px;
+  margin: 32px 0 14px;
   padding: 10px 0 10px 14px;
-  border-bottom: none;
   border-left: 4px solid var(--pink);
   background: linear-gradient(90deg, rgba(255, 110, 180, 0.08), transparent);
   border-radius: 0 8px 8px 0;
   line-height: 1.4;
 }
 
-.page-card h2 + p {
-  margin-top: 4px;
+.page-body h2:first-child {
+  margin-top: 0;
 }
 
-.page-card p,
-.page-card li {
+.page-body p,
+.page-body li {
   line-height: 1.8;
 }
 
-.page-card ul {
+.page-body ul {
   padding-left: 1.1rem;
   margin: 8px 0 20px;
 }
 
-.page-card li {
+.page-body li {
   color: var(--text-light);
-  margin-bottom: 16px;
-  padding-left: 4px;
+  margin-bottom: 14px;
 }
 
-.page-card li:last-child {
-  margin-bottom: 0;
-}
-
-.page-card li strong {
+.page-body li strong {
   color: var(--purple);
   font-weight: 700;
 }
 
-.page-card li br {
+.page-body li br {
   display: block;
   margin-top: 6px;
-  content: "";
 }
 
-.page-card strong {
-  color: var(--text);
-  font-weight: 700;
-}
-
-.page-card code {
+.page-body code {
   background: rgba(155, 89, 245, 0.08);
   color: var(--purple);
   padding: 2px 8px;
@@ -731,11 +733,10 @@ body.subpage {
   background: rgba(155, 89, 245, 0.08);
   padding: 6px 14px;
   border-radius: 20px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .page-meta em {
-  color: var(--purple);
   font-style: normal;
   font-weight: 600;
 }
@@ -744,7 +745,7 @@ body.subpage {
   background: linear-gradient(135deg, rgba(255, 110, 180, 0.1), rgba(155, 89, 245, 0.1));
   border-radius: 12px;
   padding: 24px 26px;
-  margin: 24px 0 8px;
+  margin: 20px 0 8px;
   border: 1px solid rgba(155, 89, 245, 0.15);
 }
 
@@ -754,17 +755,9 @@ body.subpage {
   border-bottom: none !important;
 }
 
-.contact-box p:last-child {
-  margin-bottom: 0 !important;
-}
-
 .contact-box a {
   font-weight: 700;
   color: var(--purple);
-}
-
-.contact-box a:hover {
-  color: var(--pink);
 }
 
 .doc-list {
@@ -810,9 +803,17 @@ body.subpage {
 }
 
 .faq-list li {
-  padding: 20px 0;
+  padding: 18px 0;
   border-bottom: 1px dashed rgba(155, 89, 245, 0.15);
   line-height: 1.75;
+}
+
+.faq-list li:last-child {
+  border-bottom: none;
+}
+
+.faq-list strong {
+  color: var(--purple);
 }
 
 .faq-list li br {
@@ -824,8 +825,8 @@ body.subpage {
   display: flex;
   align-items: flex-start;
   gap: 24px;
-  margin-bottom: 32px;
-  padding-bottom: 28px;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
   border-bottom: 1px dashed rgba(155, 89, 245, 0.15);
 }
 
@@ -835,9 +836,10 @@ body.subpage {
   padding-bottom: 0 !important;
 }
 
-.support-intro .page-meta {
-  margin-top: 8px;
-  margin-bottom: 0;
+.support-cat {
+  width: 88px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 12px rgba(155, 89, 245, 0.2));
 }
 
 .url-box {
@@ -854,38 +856,30 @@ body.subpage {
   word-break: break-all;
 }
 
-.faq-list li:last-child {
-  border-bottom: none;
-}
-
-.faq-list strong {
-  color: var(--purple);
-}
-
-.support-cat {
-  width: 88px;
-  flex-shrink: 0;
-  filter: drop-shadow(0 4px 12px rgba(155, 89, 245, 0.2));
+body.subpage .site-footer {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  background: rgba(61, 44, 79, 0.92);
+  backdrop-filter: blur(8px);
 }
 
 @media (max-width: 768px) {
-  .page-card {
-    padding: 28px 20px;
+  .page-center {
+    padding: calc(var(--header-h) + 16px) 14px 32px;
   }
 
-  .page-card h2 {
-    font-size: 1rem;
-    margin-top: 28px;
+  .page-card-head {
+    padding: 28px 20px 22px;
+  }
+
+  .page-body {
+    padding: 24px 20px 32px;
   }
 
   .support-intro {
     flex-direction: column;
     align-items: center;
     text-align: center;
-  }
-
-  .header-nav a {
-    padding: 5px 10px;
-    font-size: 0.85rem;
   }
 }
