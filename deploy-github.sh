@@ -18,4 +18,4 @@ echo "Pushing branch $BRANCH to origin..."
 git push -u origin "$BRANCH"
 
 echo ""
-echo "Done. Next: Cloudflare Dashboard → Workers & Pages → pick10-legal → Custom domains → pick10.lx06.com"
+echo "Done. Next: Cloudflare Dashboard -> Workers & Pages -> pick10-legal -> Custom domains -> pick10.lx06.com"
