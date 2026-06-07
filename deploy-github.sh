@@ -2,7 +2,8 @@
 # Pick10 website — one-command update, push & deploy
 # Usage:
 #   ./deploy-github.sh                  # auto commit + push + verify
-#   ./deploy-github.sh "your message"   # custom commit message
+#   ./deploy-github.sh "your message"     # custom commit message
+#   ./deploy-github.sh --redeploy         # force Cloudflare rebuild (empty commit)
 set -euo pipefail
 
 cd "$(dirname "$0")"
@@ -11,7 +12,17 @@ REPO_SSH="git@github.com:lixiao90s/pick10-legal.git"
 REPO_HTTPS="https://github.com/lixiao90s/pick10-legal.git"
 BRANCH="main"
 SITE="https://pick10.lx06.com"
-COMMIT_MSG="${1:-Update website $(date '+%Y-%m-%d %H:%M')}"
+FORCE_REDEPLOY=0
+COMMIT_MSG=""
+
+for arg in "$@"; do
+  case "$arg" in
+    --redeploy|-r) FORCE_REDEPLOY=1 ;;
+    *) COMMIT_MSG="$arg" ;;
+  esac
+done
+
+[[ -z "$COMMIT_MSG" ]] && COMMIT_MSG="Update website $(date '+%Y-%m-%d %H:%M')"
 
 info()  { printf '\033[1;34m→\033[0m %s\n' "$*"; }
 ok()    { printf '\033[1;32m✓\033[0m %s\n' "$*"; }
@@ -46,6 +57,17 @@ push_https() {
   git -c http.version=HTTP/1.1 push -u origin "$BRANCH"
 }
 
+do_push() {
+  info "Pushing to GitHub ($BRANCH)..."
+  if push_ssh 2>/dev/null; then
+    ok "Pushed via SSH"
+  elif push_https 2>/dev/null; then
+    ok "Pushed via HTTPS"
+  else
+    fail "Push failed. Check SSH key or network/proxy."
+  fi
+}
+
 verify_deploy() {
   local url="$1" max=12 i=0
   info "Waiting for Cloudflare deploy..."
@@ -57,50 +79,66 @@ verify_deploy() {
     i=$((i + 1))
     sleep 5
   done
-  warn "Deploy pushed but site not verified yet. Check Cloudflare Dashboard."
+  warn "Site not verified yet. Check Cloudflare Dashboard → pick10-legal → Deployments."
   return 1
+}
+
+print_urls() {
+  echo ""
+  ok "Deploy complete!"
+  echo "  Home:    $SITE/"
+  echo "  Privacy: $SITE/privacy.html"
+  echo "  Support: $SITE/support.html"
+  echo "  Terms:   $SITE/terms.html"
+  echo "  Legal:   $SITE/legal.html"
 }
 
 # --- main ---
 info "Pick10 website deploy"
-info "Commit message: $COMMIT_MSG"
 
 if ! git rev-parse --git-dir &>/dev/null; then
   fail "Not a git repository. Run from pick10-legal folder."
 fi
 
-# Stage all changes
+LAST_COMMIT="$(git log -1 --format='%h %s (%cr)')"
+info "Latest commit: $LAST_COMMIT"
+
 git add -A
 
 if git diff --cached --quiet; then
-  ok "No changes to deploy."
+  if [[ "$FORCE_REDEPLOY" -eq 1 ]]; then
+    warn "No file changes — creating empty commit to trigger Cloudflare redeploy."
+    git commit --allow-empty -m "$COMMIT_MSG (redeploy)"
+    do_push
+    echo ""
+    verify_deploy "$SITE/" || true
+    verify_deploy "$SITE/privacy.html" || true
+    print_urls
+    exit 0
+  fi
+
+  ok "No changes to deploy — local files already committed and pushed."
+  info "This is normal if you haven't edited any files since last deploy."
+  echo ""
+  info "Tips:"
+  echo "  • Edit HTML/CSS in pick10-legal/, then run ./deploy-github.sh again"
+  echo "  • Force Cloudflare rebuild: ./deploy-github.sh --redeploy"
+  echo ""
   info "Checking live site..."
   verify_deploy "$SITE/" || true
+  verify_deploy "$SITE/privacy.html" || true
+  print_urls
   exit 0
 fi
 
+info "Commit message: $COMMIT_MSG"
 info "Changes to deploy:"
 git diff --cached --stat
 
 git commit -m "$COMMIT_MSG"
-
-info "Pushing to GitHub ($BRANCH)..."
-if push_ssh 2>/dev/null; then
-  ok "Pushed via SSH"
-elif push_https 2>/dev/null; then
-  ok "Pushed via HTTPS"
-else
-  fail "Push failed. Check SSH key or network/proxy."
-fi
+do_push
 
 echo ""
 verify_deploy "$SITE/" || true
 verify_deploy "$SITE/privacy.html" || true
-
-echo ""
-ok "Deploy complete!"
-echo "  Home:    $SITE/"
-echo "  Privacy: $SITE/privacy.html"
-echo "  Support: $SITE/support.html"
-echo "  Terms:   $SITE/terms.html"
-echo "  Legal:   $SITE/legal.html"
+print_urls
