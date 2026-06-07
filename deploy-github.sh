@@ -1,56 +1,106 @@
 #!/usr/bin/env bash
+# Pick10 website — one-command update, push & deploy
+# Usage:
+#   ./deploy-github.sh                  # auto commit + push + verify
+#   ./deploy-github.sh "your message"   # custom commit message
 set -euo pipefail
-
-REPO_URL="${1:-https://github.com/lixiao90s/pick10-legal.git}"
-BRANCH="${2:-main}"
-USE_SSH="${USE_SSH:-0}"
 
 cd "$(dirname "$0")"
 
-if [[ "$USE_SSH" == "1" ]] || [[ "$REPO_URL" == git@* ]]; then
-  if [[ "$REPO_URL" == https://* ]]; then
-    REPO_URL="$(echo "$REPO_URL" | sed -E 's#https://github.com/(.+)\.git#git@github.com:\1.git#')"
-  fi
+REPO_SSH="git@github.com:lixiao90s/pick10-legal.git"
+REPO_HTTPS="https://github.com/lixiao90s/pick10-legal.git"
+BRANCH="main"
+SITE="https://pick10.lx06.com"
+COMMIT_MSG="${1:-Update website $(date '+%Y-%m-%d %H:%M')}"
+
+info()  { printf '\033[1;34m→\033[0m %s\n' "$*"; }
+ok()    { printf '\033[1;32m✓\033[0m %s\n' "$*"; }
+warn()  { printf '\033[1;33m!\033[0m %s\n' "$*"; }
+fail()  { printf '\033[1;31m✗\033[0m %s\n' "$*" >&2; exit 1; }
+
+ensure_ssh() {
   mkdir -p "$HOME/.ssh"
+  chmod 700 "$HOME/.ssh"
   if ! grep -q '^github.com ' "$HOME/.ssh/known_hosts" 2>/dev/null; then
-    echo "Adding github.com to ~/.ssh/known_hosts ..."
-    ssh-keyscan -t ed25519 github.com >> "$HOME/.ssh/known_hosts"
+    info "Adding github.com to known_hosts..."
+    ssh-keyscan -t ed25519 github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
   fi
-fi
-
-if ! git remote get-url origin &>/dev/null; then
-  git remote add origin "$REPO_URL"
-  echo "Added remote: $REPO_URL"
-else
-  git remote set-url origin "$REPO_URL"
-  echo "Updated remote: $REPO_URL"
-fi
-
-echo "Pushing branch $BRANCH to origin..."
-
-push_with_https() {
-  git -c http.version=HTTP/1.1 push -u origin "$BRANCH"
 }
 
-push_with_ssh() {
-  local ssh_url
-  ssh_url="$(git remote get-url origin | sed -E 's#https://github.com/(.+)\.git#git@github.com:\1.git#')"
-  git remote set-url origin "$ssh_url"
-  mkdir -p "$HOME/.ssh"
-  if ! grep -q '^github.com ' "$HOME/.ssh/known_hosts" 2>/dev/null; then
-    echo "Adding github.com to ~/.ssh/known_hosts ..."
-    ssh-keyscan -t ed25519 github.com >> "$HOME/.ssh/known_hosts"
+setup_remote() {
+  if git remote get-url origin &>/dev/null; then
+    git remote set-url origin "$REPO_SSH"
+  else
+    git remote add origin "$REPO_SSH"
   fi
+}
+
+push_ssh() {
+  ensure_ssh
+  setup_remote
   git push -u origin "$BRANCH"
 }
 
-if [[ "$USE_SSH" == "1" ]] || [[ "$REPO_URL" == git@* ]]; then
-  push_with_ssh
-elif ! push_with_https; then
-  echo ""
-  echo "HTTPS push failed. Retrying with SSH..."
-  push_with_ssh
+push_https() {
+  git remote set-url origin "$REPO_HTTPS"
+  git -c http.version=HTTP/1.1 push -u origin "$BRANCH"
+}
+
+verify_deploy() {
+  local url="$1" max=12 i=0
+  info "Waiting for Cloudflare deploy..."
+  while [[ $i -lt $max ]]; do
+    if curl -sf -o /dev/null --max-time 10 "$url"; then
+      ok "Site is live: $url"
+      return 0
+    fi
+    i=$((i + 1))
+    sleep 5
+  done
+  warn "Deploy pushed but site not verified yet. Check Cloudflare Dashboard."
+  return 1
+}
+
+# --- main ---
+info "Pick10 website deploy"
+info "Commit message: $COMMIT_MSG"
+
+if ! git rev-parse --git-dir &>/dev/null; then
+  fail "Not a git repository. Run from pick10-legal folder."
+fi
+
+# Stage all changes
+git add -A
+
+if git diff --cached --quiet; then
+  ok "No changes to deploy."
+  info "Checking live site..."
+  verify_deploy "$SITE/" || true
+  exit 0
+fi
+
+info "Changes to deploy:"
+git diff --cached --stat
+
+git commit -m "$COMMIT_MSG"
+
+info "Pushing to GitHub ($BRANCH)..."
+if push_ssh 2>/dev/null; then
+  ok "Pushed via SSH"
+elif push_https 2>/dev/null; then
+  ok "Pushed via HTTPS"
+else
+  fail "Push failed. Check SSH key or network/proxy."
 fi
 
 echo ""
-echo "Done. Next: Cloudflare Dashboard -> Workers & Pages -> pick10-legal -> Custom domains -> pick10.lx06.com"
+verify_deploy "$SITE/" || true
+verify_deploy "$SITE/privacy.html" || true
+
+echo ""
+ok "Deploy complete!"
+echo "  Home:    $SITE/"
+echo "  Privacy: $SITE/privacy.html"
+echo "  Support: $SITE/support.html"
+echo "  Terms:   $SITE/terms.html"
+echo "  Legal:   $SITE/legal.html"

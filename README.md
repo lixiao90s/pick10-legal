@@ -28,15 +28,20 @@ Pick10 App Store legal pages — hosted on Cloudflare Pages at `https://pick10.l
 - Public
 - **不要**勾选 "Add a README"（本地已有 commit）
 
-### Step 2: 推送到 GitHub
+## 一键部署
 
 ```bash
 cd pick10-legal
-chmod +x deploy-github.sh
 ./deploy-github.sh
-# 或指定其他 remote：
-# ./deploy-github.sh https://github.com/YOUR_USER/pick10-legal.git main
 ```
+
+自定义提交说明：
+
+```bash
+./deploy-github.sh "Update privacy policy"
+```
+
+脚本会自动：暂存变更 → 提交 → SSH 推送 GitHub → 等待 Cloudflare 部署生效。
 
 ### Step 3: Cloudflare Pages 连接 GitHub
 
