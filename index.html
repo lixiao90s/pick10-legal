@@ -3,41 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pick10 — Legal Documents</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Pick10 (Make 10) — A casual number puzzle game. Place numbers, combine to reach 10!">
+  <title>Pick10 — Make 10 | 休闲数字益智游戏</title>
+  <link rel="stylesheet" href="game.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Pick10</h1>
-    <p class="subtitle">Legal Documents / 法律文档</p>
-
-    <p>Pick10 (Make 10) is a casual number puzzle game for iOS. Below are the legal and policy documents for this app.</p>
-    <p>Pick10（Make 10）是一款 iOS 休闲数字益智游戏。以下为相关法律与政策文档。</p>
-
-    <p class="meta">Bundle ID: <code>com.lixiao.game.make10</code> · Website: <a href="https://pick10.lx06.com">pick10.lx06.com</a></p>
-
-    <h2>Documents / 文档</h2>
-    <ul class="doc-list">
-      <li><a href="privacy.html">Privacy Policy / 隐私政策</a></li>
-      <li><a href="terms.html">Terms of Service / 用户协议</a></li>
-      <li><a href="support.html">Support / 技术支持</a></li>
-    </ul>
-
-    <h2>App Store URLs / 审核填写地址</h2>
-    <ul>
-      <li><strong>Privacy Policy URL</strong> — <a href="https://pick10.lx06.com/privacy.html">https://pick10.lx06.com/privacy.html</a></li>
-      <li><strong>Support URL</strong> — <a href="https://pick10.lx06.com/support.html">https://pick10.lx06.com/support.html</a></li>
-    </ul>
-
-    <div class="contact-box">
-      <strong>Contact / 联系我们</strong><br>
-      Email: <a href="mailto:393889869@qq.com">393889869@qq.com</a><br>
-      Phone: <a href="tel:+8618782960484">+86 18782960484</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/cat.png" alt="Pick10" class="logo-cat">
+        <span>Pick10</span>
+      </a>
+      <nav class="header-nav">
+        <a href="#features">玩法</a>
+        <a href="#preview">预览</a>
+        <a href="support.html">支持</a>
+        <a href="privacy.html">隐私</a>
+      </nav>
     </div>
+  </header>
 
-    <footer>
-      &copy; 2026 Pick10. All rights reserved.
-    </footer>
-  </div>
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <p class="hero-tag">Make 10 · 凑十益智</p>
+        <h1>放置数字<br>凑成 <span class="highlight-10">10</span></h1>
+        <p class="hero-desc">Pick10 是一款轻松治愈的休闲数字益智游戏。在糖果棋盘上放置数字，相邻组合凑成 10，享受连击与高分挑战。</p>
+        <div class="hero-actions">
+          <a href="#download" class="btn btn-primary">App Store 下载</a>
+          <a href="#preview" class="btn btn-secondary">看看怎么玩</a>
+        </div>
+      </div>
+      <div class="hero-mascot">
+        <img src="assets/cat.png" alt="Pick10 mascot" class="cat-float">
+        <div class="hero-demo-grid" aria-hidden="true">
+          <div class="demo-cell" style="--cell:1"><img src="assets/cellBg/cell1.png" alt=""><img src="assets/numbers/3.png" class="demo-num" alt="3"></div>
+          <div class="demo-cell" style="--cell:2"><img src="assets/cellBg/cell2.png" alt=""><img src="assets/numbers/7.png" class="demo-num" alt="7"></div>
+          <div class="demo-cell" style="--cell:3"><img src="assets/cellBg/cell3.png" alt=""><span class="demo-sum">=10</span></div>
+          <div class="demo-cell" style="--cell:4"><img src="assets/cellBg/cell4.png" alt=""><img src="assets/numbers/4.png" class="demo-num" alt="4"></div>
+          <div class="demo-cell" style="--cell:5"><img src="assets/cellBg/cell5.png" alt=""><img src="assets/numbers/6.png" class="demo-num" alt="6"></div>
+          <div class="demo-cell" style="--cell:6"><img src="assets/cellBg/cell6.png" alt=""><img src="assets/numbers/2.png" class="demo-num" alt="2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="section features">
+    <h2 class="section-title">游戏特色</h2>
+    <div class="feature-grid">
+      <article class="feature-card">
+        <div class="feature-icon feature-icon-10">
+          <img src="assets/numbers/1.png" alt="1">
+          <span class="feature-num-fallback">0</span>
+        </div>
+        <h3>规则简单</h3>
+        <p>放置数字，让相邻数字之和等于 10 即可消除得分，上手零门槛。</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon cells-preview">
+          <img src="assets/cellBg/cell1.png" alt="">
+          <img src="assets/cellBg/cell5.png" alt="">
+          <img src="assets/cellBg/cell8.png" alt="">
+        </div>
+        <h3>糖果画风</h3>
+        <p>缤纷格子与可爱数字，每一局都是甜蜜又放松的益智体验。</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon"><img src="assets/cat.png" alt="" class="feature-cat"></div>
+        <h3>Game Center</h3>
+        <p>全球排行榜与成就系统，挑战更高分，解锁更多成就。</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="preview" class="section preview">
+    <h2 class="section-title">怎么玩</h2>
+    <div class="preview-board">
+      <div class="board-row">
+        <div class="board-cell"><img src="assets/cellBg/cell1.png" alt=""><img src="assets/numbers/5.png" class="board-num" alt="5"></div>
+        <div class="board-cell"><img src="assets/cellBg/cell2.png" alt=""><img src="assets/numbers/5.png" class="board-num" alt="5"></div>
+        <div class="board-cell highlight"><img src="assets/cellBg/cell3.png" alt=""><span class="board-sum">10</span></div>
+        <div class="board-cell"><img src="assets/cellBg/cell4.png" alt=""><img src="assets/numbers/1.png" class="board-num" alt="1"></div>
+      </div>
+      <div class="board-row">
+        <div class="board-cell"><img src="assets/cellBg/cell5.png" alt=""><img src="assets/numbers/9.png" class="board-num" alt="9"></div>
+        <div class="board-cell"><img src="assets/cellBg/cell6.png" alt=""><img src="assets/numbers/1.png" class="board-num" alt="1"></div>
+        <div class="board-cell highlight"><img src="assets/cellBg/cell7.png" alt=""><span class="board-sum">10</span></div>
+        <div class="board-cell"><img src="assets/cellBg/cell8.png" alt=""><img src="assets/numbers/3.png" class="board-num" alt="3"></div>
+      </div>
+    </div>
+    <ol class="howto-steps">
+      <li><strong>放置</strong> — 从底部选择数字，放入棋盘空格</li>
+      <li><strong>组合</strong> — 相邻数字相加等于 10 时自动消除</li>
+      <li><strong>连击</strong> — 连续消除获得更高分数与成就</li>
+    </ol>
+  </section>
+
+  <section id="download" class="section download">
+    <div class="download-card">
+      <img src="assets/cat.png" alt="Pick10" class="download-cat">
+      <div>
+        <h2>立即开玩 Pick10</h2>
+        <p>免费下载 · iOS · 支持 Game Center</p>
+        <a href="#" class="btn btn-primary btn-lg" aria-label="Download on the App Store">Download on the App Store</a>
+        <p class="download-note">上架审核中，App Store 链接即将更新</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/cat.png" alt="" class="footer-cat">
+        <span>Pick10 · Make 10</span>
+      </div>
+      <div class="footer-links">
+        <a href="privacy.html">隐私政策</a>
+        <a href="terms.html">用户协议</a>
+        <a href="support.html">技术支持</a>
+      </div>
+      <div class="footer-contact">
+        <a href="mailto:393889869@qq.com">393889869@qq.com</a>
+        <span>·</span>
+        <a href="tel:+8618782960484">18782960484</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Pick10. All rights reserved.</p>
+    </div>
+  </footer>
 </body>
 </html>
