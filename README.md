@@ -10,6 +10,7 @@ Pick10 App Store legal pages — hosted on Cloudflare Pages at `https://pick10.l
 | `support.html` | `/support.html` | **Support URL**（技术支持） |
 | `privacy.html` | `/privacy.html` | **Privacy Policy URL**（隐私政策） |
 | `terms.html` | `/terms.html` | 应用内用户协议 |
+| `app-ads.txt` | `/app-ads.txt` | **AdMob** app-ads.txt 验证（根目录纯文本） |
 
 ## App Store Connect 填写
 
@@ -61,7 +62,10 @@ cd pick10-legal
 ```bash
 curl -I https://pick10.lx06.com/privacy.html
 curl -I https://pick10.lx06.com/support.html
+curl https://pick10.lx06.com/app-ads.txt
 ```
+
+AdMob 会从 App Store 中的 **Support URL** 域名抓取 `app-ads.txt`。Support URL 必须是 `pick10.lx06.com`，不能是 Notion 等其他域名。
 
 ## Local preview
 

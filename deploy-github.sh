@@ -91,6 +91,7 @@ print_urls() {
   echo "  Support: $SITE/support.html"
   echo "  Terms:   $SITE/terms.html"
   echo "  Legal:   $SITE/legal.html"
+  echo "  AdMob:   $SITE/app-ads.txt"
 }
 
 # --- main ---
