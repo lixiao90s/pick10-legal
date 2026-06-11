@@ -87,8 +87,8 @@ print_urls() {
   echo ""
   ok "Deploy complete!"
   echo "  Home:    $SITE/"
-  echo "  Privacy: $SITE/privacy.html"
-  echo "  Support: $SITE/support.html"
+  echo "  Privacy: $SITE/privacy"
+  echo "  Support: $SITE/support"
   echo "  Terms:   $SITE/terms.html"
   echo "  Legal:   $SITE/legal.html"
   echo "  AdMob:   $SITE/app-ads.txt"
@@ -113,7 +113,7 @@ if git diff --cached --quiet; then
     do_push
     echo ""
     verify_deploy "$SITE/" || true
-    verify_deploy "$SITE/privacy.html" || true
+    verify_deploy "$SITE/privacy" || true
     print_urls
     exit 0
   fi

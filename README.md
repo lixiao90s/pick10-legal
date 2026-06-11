@@ -7,8 +7,8 @@ Pick10 App Store legal pages — hosted on Cloudflare Pages at `https://pick10.l
 | File | URL | App Store 用途 |
 |------|-----|----------------|
 | `index.html` | `/` | 法律文档索引 |
-| `support.html` | `/support.html` | **Support URL**（技术支持） |
-| `privacy.html` | `/privacy.html` | **Privacy Policy URL**（隐私政策） |
+| `support.html` | `/support` 或 `/support.html` | **Support URL**（技术支持） |
+| `privacy.html` | `/privacy` 或 `/privacy.html` | **Privacy Policy URL**（隐私政策） |
 | `terms.html` | `/terms.html` | 应用内用户协议 |
 | `app-ads.txt` | `/app-ads.txt` | **AdMob** app-ads.txt 验证（根目录纯文本） |
 
@@ -16,8 +16,8 @@ Pick10 App Store legal pages — hosted on Cloudflare Pages at `https://pick10.l
 
 | 字段 | URL |
 |------|-----|
-| Privacy Policy URL | `https://pick10.lx06.com/privacy.html` |
-| Support URL | `https://pick10.lx06.com/support.html` |
+| Privacy Policy URL | `https://pick10.lx06.com/privacy` |
+| Support URL | `https://pick10.lx06.com/support` |
 
 ## Deploy — 方式 A（GitHub + Cloudflare Pages）
 
@@ -60,12 +60,18 @@ cd pick10-legal
 ### Step 4: 验证
 
 ```bash
-curl -I https://pick10.lx06.com/privacy.html
-curl -I https://pick10.lx06.com/support.html
+# app-ads.txt — 应返回一行纯文本
 curl https://pick10.lx06.com/app-ads.txt
+
+# App Store 链接 — 用无 .html 路径，直接 200
+curl -I https://pick10.lx06.com/support
+curl -I https://pick10.lx06.com/privacy
+
+# 带 .html 会 308 跳转到上面路径（Cloudflare Pretty URLs，浏览器正常）
+curl -I https://pick10.lx06.com/support.html   # → 308 location: /support
 ```
 
-AdMob 会从 App Store 中的 **Support URL** 域名抓取 `app-ads.txt`。Support URL 必须是 `pick10.lx06.com`，不能是 Notion 等其他域名。
+AdMob 会从 App Store **Support URL** 的域名抓取 `app-ads.txt`（域名须为 `pick10.lx06.com`）。`support.html` 返回 308 不影响 AdMob 验证。
 
 ## Local preview
 
