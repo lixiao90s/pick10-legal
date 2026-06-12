@@ -12,6 +12,7 @@ REPO_SSH="git@github.com:lixiao90s/pick10-legal.git"
 REPO_HTTPS="https://github.com/lixiao90s/pick10-legal.git"
 BRANCH="main"
 SITE="https://pick10.lx06.com"
+APP_STORE="https://apps.apple.com/us/app/pick10/id6776469249"
 FORCE_REDEPLOY=0
 COMMIT_MSG=""
 
@@ -92,6 +93,7 @@ print_urls() {
   echo "  Terms:   $SITE/terms.html"
   echo "  Legal:   $SITE/legal.html"
   echo "  AdMob:   $SITE/app-ads.txt"
+  echo "  Store:   $APP_STORE"
 }
 
 # --- main ---
@@ -127,7 +129,7 @@ if git diff --cached --quiet; then
   echo ""
   info "Checking live site..."
   verify_deploy "$SITE/" || true
-  verify_deploy "$SITE/privacy.html" || true
+  verify_deploy "$SITE/privacy" || true
   print_urls
   exit 0
 fi
@@ -141,5 +143,5 @@ do_push
 
 echo ""
 verify_deploy "$SITE/" || true
-verify_deploy "$SITE/privacy.html" || true
+verify_deploy "$SITE/privacy" || true
 print_urls

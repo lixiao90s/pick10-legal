@@ -18,6 +18,7 @@ Pick10 App Store legal pages — hosted on Cloudflare Pages at `https://pick10.l
 |------|-----|
 | Privacy Policy URL | `https://pick10.lx06.com/privacy` |
 | Support URL | `https://pick10.lx06.com/support` |
+| App Store | [https://apps.apple.com/us/app/pick10/id6776469249](https://apps.apple.com/us/app/pick10/id6776469249) |
 
 ## Deploy — 方式 A（GitHub + Cloudflare Pages）
 
